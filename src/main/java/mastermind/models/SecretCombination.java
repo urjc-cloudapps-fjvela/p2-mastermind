@@ -1,16 +1,20 @@
-package mastermind;
+package mastermind.models;
 
 import java.util.Random;
+
+import mastermind.Const;
+
+import java.util.Arrays;
 import java.util.Collections;
 
 class SecretCombination extends Combination {
 
 	SecretCombination() {
-		for(Color color : Color.values()){
+		for (Color color : Color.values()) {
 			this.colors.add(color);
 		}
 		Random random = new Random(System.currentTimeMillis());
-		final int erased = colors.size() - Combination.getWidth();
+		final int erased = colors.size() - Const.WIDTH;
 		for (int i = 0; i < erased; i++) {
 			this.colors.remove(random.nextInt(this.colors.size()));
 		}
@@ -19,7 +23,7 @@ class SecretCombination extends Combination {
 
 	Result getResult(ProposedCombination proposedCombination) {
 		int blacks = 0;
-		for (int i=0; i<this.colors.size(); i++) {
+		for (int i = 0; i < this.colors.size(); i++) {
 			if (proposedCombination.contains(this.colors.get(i), i)) {
 				blacks++;
 			}
@@ -33,11 +37,10 @@ class SecretCombination extends Combination {
 		return new Result(blacks, whites - blacks);
 	}
 
-	void writeln() {
-		for (int i = 0; i < this.colors.size(); i++) {
-			Message.SECRET.write();
-		}
-		Message.NEW_LINE.write();
+	String getCombination() {
+		char[] secret = new char[colors.size()];
+		Arrays.fill(secret, Message.SECRET.getMessage().charAt(0)); //chapuzilla
+		return new String(secret);
 	}
 
 }
